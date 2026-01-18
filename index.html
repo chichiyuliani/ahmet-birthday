@@ -1,0 +1,473 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happiest birthday 34th, Ahmet!</title>
+
+  <style>
+    :root{
+      /* Palet pastel dominan biru/navy */
+      --navy:#0A2A6B;
+      --deep:#1E58A5;
+      --soft-blue:#DCEEF9;
+      --powder:#EAF6FF;
+      --mint:#D8F1EE;
+      --peach:#FFE7E0;
+      --lav:#EEE7FF;
+      --card:#FFFFFF;
+      --text:#183B70;
+      --shadow:0 14px 44px rgba(10,42,107,.14);
+    }
+
+    /* ===== Base ===== */
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial,sans-serif;
+      background:
+        radial-gradient(1100px 700px at 10% -20%, var(--powder), transparent),
+        radial-gradient(1100px 700px at 120% 0%, var(--soft-blue), transparent),
+        linear-gradient(180deg,#F7FBFF 0%,#F2F7FF 100%);
+      overflow-x:hidden;
+    }
+
+    .container{max-width:1200px;margin:0 auto;padding:22px clamp(16px,3vw,38px) 70px;position:relative;}
+
+    /* ===== Hero layout ===== */
+    .hero{
+      display:grid; gap: clamp(16px, 4vw, 36px);
+      grid-template-columns: 1.05fr .95fr;
+      align-items:center; background:var(--card); border-radius:22px;
+      box-shadow:var(--shadow); padding: clamp(18px, 3.5vw, 36px); position:relative;
+      z-index:1;
+    }
+    @media (max-width: 900px){ .hero{ grid-template-columns: 1fr; } }
+
+    h1{
+      margin:0 0 10px; font-family:'Baloo 2',cursive; font-weight:800;
+      font-size: clamp(28px, 4.6vw, 54px);
+      color:var(--navy); line-height:1.05; letter-spacing:.3px;
+      text-shadow: 0 2px 0 #ffffff, 0 8px 24px rgba(12,36,90,.12);
+    }
+    .msg{
+      margin:8px 0 18px; color:#234985; font-size: clamp(14px, 2.3vw, 18px);
+    }
+    .msg .break{ display:block; height:.6em; }
+
+    /* ===== stage ===== */
+    .stage{
+      display:grid; grid-template-columns: 1fr 0.9fr; gap: clamp(10px, 3vw, 22px);
+      align-items:center; justify-items:center;
+    }
+    @media (max-width: 600px){ .stage{ grid-template-columns: 1fr; } }
+
+    /* ===== buttons/toggle ===== */
+    .btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
+    .btn{
+      background: linear-gradient(180deg,#2B62B5,#1E58A5); color:#fff; border:none;
+      padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:700;
+      box-shadow:0 10px 22px rgba(30,88,165,.25);
+    }
+    .btn.secondary{ background:#E8F2FF; color:#1E58A5; box-shadow:0 8px 18px rgba(10,42,107,.10); }
+    .toggle{ display:inline-flex; align-items:center; gap:8px; color:#1E58A5; font-weight:600; }
+
+    /* ===== Balloon layer ===== */
+    #balloons{ position:absolute; inset:0; pointer-events:none; z-index:0; }
+    .balloon{
+      --x:50%; position:absolute; left:var(--x); bottom:-140px;
+      width:42px; height:56px;
+      background: radial-gradient(circle at 30% 30%, #ffffffAA 0 12px, transparent 12px),
+                  radial-gradient(circle at 70% 20%, #ffffff66 0 10px, transparent 10px),
+                  var(--fill,#8EC5FF);
+      border-radius: 50% 50% 48% 48%;
+      box-shadow: inset -6px -10px 18px rgba(0,0,0,.08);
+      animation: floatUp var(--dur,12s) linear infinite;
+      transform: translate3d(0,0,0);
+      will-change: transform, opacity;
+    }
+    .balloon::after{
+      content:""; position:absolute; width:1.5px; height:78px; background:rgba(0,0,0,.16);
+      left:50%; transform:translateX(-50%); bottom:-78px;
+    }
+    @keyframes floatUp{
+      0%{ transform: translate3d(-50%,0,0) rotate(0); opacity:0 }
+      5%{ opacity:.95 }
+      50%{ transform: translate3d(-50%,-40vh,0) rotate(3deg) }
+      100%{ transform: translate3d(-50%,-92vh,0) rotate(-2deg); opacity:0 }
+    }
+    @-webkit-keyframes floatUp{
+      0%{ transform: translate3d(-50%,0,0) rotate(0); opacity:0 }
+      5%{ opacity:.95 }
+      50%{ transform: translate3d(-50%,-40vh,0) rotate(3deg) }
+      100%{ transform: translate3d(-50%,-92vh,0) rotate(-2deg); opacity:0 }
+    }
+
+    /* ===== Confetti global layer ===== */
+    .confetti{ position:fixed; inset:0; pointer-events:none; z-index:3; }
+    .confetti i{
+      position:absolute; width:8px; height:14px; background:#A3CEF1; border-radius:2px;
+      will-change: transform, opacity; animation: fall var(--t,6s) ease-in forwards;
+      transform: translate3d(var(--sx,0), -10px, 0) rotate(0deg);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.35) inset;
+    }
+    @keyframes fall{
+      0%{ transform: translate3d(var(--sx), -10px, 0) rotate(0deg); }
+      100%{ transform: translate3d(var(--sx), 100vh, 0) rotate(540deg); opacity:.2;}
+    }
+    @-webkit-keyframes fall{
+      0%{ transform: translate3d(var(--sx), -10px, 0) rotate(0deg); }
+      100%{ transform: translate3d(var(--sx), 100vh, 0) rotate(540deg); opacity:.2;}
+    }
+
+    /* ===== Cake ===== */
+    .cake-wrap{
+      width: clamp(220px, 34vw, 420px);
+      aspect-ratio: 1 / 1.05;
+      position:relative; z-index:1; filter: drop-shadow(0 12px 24px rgba(10,42,107,.16));
+    }
+    .cake-title{
+      position:absolute; top:10px; left:0; right:0; text-align:center;
+      font-family:'Baloo 2', cursive; font-size: clamp(16px, 2.5vw, 22px);
+      color:#0F3B86; text-shadow:0 1px 0 #fff;
+      font-weight:800; letter-spacing:.3px;
+      z-index:2;
+    }
+    .plate{
+      position:absolute; bottom:6%; left:50%; transform:translateX(-50%);
+      width:68%; height:8%; background:#D0E6FF; border-radius: 60px;
+      box-shadow: inset 0 -5px 12px rgba(0,0,0,.08);
+    }
+
+    /* iOS-friendly transform hints */
+    .tier, .eye, .mouth{
+      transform-box: fill-box;          /* penting untuk Safari iOS */
+      transform-origin: 50% 50%;
+      will-change: transform, opacity;
+    }
+
+    /* Animasi COLLAPSE */
+    .tier{ opacity:1; }
+    @keyframes collapseTier {
+      0%   { transform: translate(0,0) rotate(0); }
+      20%  { transform: translate(6px,-4px) rotate(6deg); }
+      100% { transform: translate(120px, 190px) rotate(26deg); opacity:.95; }
+    }
+    @-webkit-keyframes collapseTier {
+      0%   { transform: translate(0,0) rotate(0); }
+      20%  { transform: translate(6px,-4px) rotate(6deg); }
+      100% { transform: translate(120px, 190px) rotate(26deg); opacity:.95; }
+    }
+    /* Delay bertahap (atas -> bawah) */
+    .collapse .t1 { animation: collapseTier 1.1s ease-in forwards; animation-delay: .2s; }
+    .collapse .t2 { animation: collapseTier 1.1s ease-in forwards; animation-delay: 1.0s; }
+    .collapse .t3 { animation: collapseTier 1.1s ease-in forwards; animation-delay: 1.8s; }
+    .collapse .t4 { animation: collapseTier 1.1s ease-in forwards; animation-delay: 2.6s; }
+
+    /* Ekspresi kue */
+    @keyframes shock {
+      0%{ transform: scale(1); }
+      30%{ transform: scale(1.2); }
+      100%{ transform: scale(1.15); }
+    }
+    .collapse .eye, .collapse .mouth{ animation: shock .6s ease-in forwards; animation-delay: .2s; }
+
+    /* ===== Character ===== */
+    .guy{ width: clamp(170px, 28vw, 280px); aspect-ratio:1/1; }
+    .g-bob{ animation:bob 3.6s ease-in-out infinite; transform-origin:50% 100%; will-change: transform; }
+    .g-blink{ animation:blink 5s infinite; transform-origin:center; }
+    @keyframes bob{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-6px) } }
+    @keyframes blink{ 0%,2%,60%,62%,100%{ transform:scaleY(1) } 1%,61%{ transform:scaleY(.08) } }
+
+    /* ===== Gallery ===== */
+    .section{ margin-top:28px; background:var(--card); border-radius:18px; box-shadow:var(--shadow);
+      padding: clamp(14px, 3vw, 24px); }
+    .section h2{ margin:0 0 12px; color:var(--navy); font-size: clamp(18px, 3vw, 24px);
+      font-family:'Baloo 2',cursive; }
+    .gallery{ display:grid; grid-template-columns:repeat(12,1fr); gap: clamp(10px,2vw,16px); }
+    .ph{
+      grid-column:span 4; min-height:140px; border-radius:14px; border:1px solid #D9E9FF;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,0)),
+        repeating-linear-gradient(135deg,#E9F3FF 0 10px,#E5F0FF 10px 20px);
+      position:relative; overflow:hidden;
+    }
+    .ph::after{
+      content:"Photo Placeholder"; position:absolute; inset:0; display:grid; place-items:center;
+      color:#2E5595; font-weight:600; opacity:.72; font-size:14px;
+    }
+    @media (max-width: 900px){ .ph{ grid-column:span 6; } }
+    @media (max-width: 540px){ .ph{ grid-column:span 12; } }
+
+    /* ===== Reduce-motion handling (class-based) ===== */
+    html.rm-reduce .balloon,
+    html.rm-reduce .confetti i,
+    html.rm-reduce .g-bob,
+    html.rm-reduce .g-blink,
+    html.rm-reduce .collapse .tier,
+    html.rm-reduce .eye,
+    html.rm-reduce .mouth { animation: none !important; }
+
+    footer{ text-align:center; color:#5F7EB4; margin:22px 0 0; font-size:13px; }
+
+    
+    /* Gallery: tampilkan IMG, sembunyikan overlay placeholder bawaan .ph */
+    .ph.has-img::after { content: none; }
+    .ph.has-img img{
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    aspect-ratio: 4 / 5;  /* ubah jika rasio ingin beda */
+    border-radius: 12px;  /* opsional: sudut membulat */
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Confetti global -->
+  <div class="confetti" aria-hidden="true"></div>
+
+  <div class="container">
+    <!-- Balon melayang -->
+    <div id="balloons" aria-hidden="true"></div>
+
+    <section class="hero" aria-labelledby="judul">
+      <div>
+        <h1 id="judul">Happiest birthday 34th, Ahmet!</h1>
+        <p class="msg">
+          <strong style="color:#0F3B86">
+            i hope u will always surrounded by good things, good people, good works, and good health! long life too.
+            and ur wishes to have yacht will come true as soon as possible.
+            im happy to know you in my monoton life for sure, ofcourse will never forget ur messy hair☺️ 
+            <span class="break"></span>
+            <span class="break"></span>
+            your best, yuli🩶
+          </strong>
+        </p>
+
+        <div class="btns">
+          <button class="btn" id="replay">🎉 Add confetti</button>
+          <button class="btn secondary" id="addBalloon">🎈 Add baloon</button>
+        </div>
+      </div>
+
+      <!-- Stage: Cake + Character -->
+      <div class="stage">
+        <!-- CAKE -->
+        <div class="cake-wrap">
+          <div class="cake-title"></div>
+          <svg id="cake" viewBox="0 0 400 420" role="img" aria-label="Kue ulang tahun animasi bertingkat">
+            <!-- Bayangan -->
+            <ellipse cx="200" cy="380" rx="120" ry="18" fill="#B9D3F9" opacity=".6"/>
+            <!-- TIER 4 (bottom) -->
+            <g class="tier t4">
+              <rect x="70" y="270" rx="22" ry="22" width="260" height="70" fill="#CFE8FF" stroke="#AFCFF6" stroke-width="5"/>
+              <path d="M80 290 q40 30 80 0 t80 0 t80 0 v25 h-240z" fill="#9BE3DD"/>
+              <g fill="#7DB1F4" opacity=".85">
+                <circle cx="120" cy="312" r="4"/><circle cx="180" cy="318" r="4"/>
+                <circle cx="240" cy="305" r="4"/><circle cx="290" cy="323" r="4"/>
+                <circle cx="95" cy="328" r="4"/><circle cx="215" cy="330" r="4"/>
+              </g>
+            </g>
+
+            <!-- TIER 3 -->
+            <g class="tier t3">
+              <rect x="95" y="210" rx="20" ry="20" width="210" height="62" fill="#FFE7E0" stroke="#F7CFC6" stroke-width="5"/>
+              <path d="M105 226 q35 26 70 0 t70 0 t50 0 v20 h-190z" fill="#E6D9FF"/>
+              <!-- FACE (surprised) -->
+              <g>
+                <ellipse class="eye" cx="185" cy="242" rx="9" ry="12" fill="#1E1E1E"/>
+                <ellipse class="eye" cx="225" cy="242" rx="9" ry="12" fill="#1E1E1E"/>
+                <path class="mouth" d="M198 258 q10 16 20 0" stroke="#B05A4A" stroke-width="6" stroke-linecap="round" fill="none"/>
+              </g>
+            </g>
+
+            <!-- TIER 2 -->
+            <g class="tier t2">
+              <rect x="120" y="150" rx="18" ry="18" width="160" height="58" fill="#EAF6FF" stroke="#CFE7FF" stroke-width="5"/>
+              <path d="M130 168 q28 20 55 0 t55 0 t35 0 v18 h-145z" fill="#FAD7D2"/>
+              <g fill="#8EC5FF" opacity=".85">
+                <circle cx="150" cy="182" r="4"/><circle cx="210" cy="176" r="4"/>
+                <circle cx="260" cy="188" r="4"/><circle cx="175" cy="194" r="4"/>
+              </g>
+            </g>
+
+            <!-- TIER 1 (top) -->
+            <g class="tier t1">
+              <rect x="150" y="88" rx="16" ry="16" width="100" height="52" fill="#D8F1EE" stroke="#BFEADF" stroke-width="5"/>
+              <path d="M160 106 q22 16 40 0 t40 0 v16 h-80z" fill="#CFE8FF"/>
+              <!-- Candles -->
+              <g>
+                <rect x="172" y="64" width="10" height="30" rx="4" fill="#1E58A5"/>
+                <rect x="198" y="55" width="10" height="39" rx="4" fill="#1E58A5"/>
+                <rect x="224" y="64" width="10" height="30" rx="4" fill="#1E58A5"/>
+                <!-- Flame -->
+                <g fill="#FFA726" stroke="#FFCC80" stroke-width="2">
+                  <path d="M177 54 q6 -10 12 0 q-6 8 -12 0z"/>
+                  <path d="M203 43 q6 -12 12 0 q-6 10 -12 0z"/>
+                  <path d="M229 54 q6 -10 12 0 q-6 8 -12 0z"/>
+                </g>
+              </g>
+            </g>
+          </svg>
+          <div class="plate" aria-hidden="true"></div>
+        </div>
+
+        <!-- CHARACTER -->
+        <svg class="guy" viewBox="0 0 300 300" role="img" aria-label="Ilustrasi pria kartun, berjanggut, rambut cokelat">
+          <ellipse cx="150" cy="270" rx="70" ry="12" fill="#A9C7F4" opacity=".45"/>
+          <g class="g-bob">
+            <!-- badan -->
+            <path d="M90 210 q60 40 120 0 v55 H90 Z" fill="#98C7FF"/>
+            <path d="M90 210 q60 40 120 0" fill="none" stroke="#7EB3F2" stroke-width="6" opacity=".7"/>
+            <!-- leher -->
+            <rect x="130" y="165" width="40" height="26" rx="10" fill="#FFD9C9"/>
+            <!-- wajah bulat -->
+            <circle cx="150" cy="135" r="70" fill="#FFE1D6" stroke="#F3C8B7" stroke-width="5"/>
+            <!-- rambut coklat -->
+            <path d="M90 120 q60 -70 130 0 q-10 -40 -45 -55 q-25 -10 -45 -2 q-30 8 -40 26 q-8 12 -10 31z" fill="#7A4B2E"/>
+            <!-- alis -->
+            <path d="M115 130 q12 -10 28 0" stroke="#693C23" stroke-width="6" stroke-linecap="round"/>
+            <path d="M160 130 q14 -10 30 0" stroke="#693C23" stroke-width="6" stroke-linecap="round"/>
+            <!-- mata -->
+            <g class="g-blink">
+              <ellipse cx="135" cy="145" rx="9" ry="12" fill="#222"/>
+              <ellipse cx="185" cy="145" rx="9" ry="12" fill="#222"/>
+            </g>
+            <!-- hidung mancung -->
+            <path d="M158 140 q-4 18 -2 30 q8 6 18 0" fill="none" stroke="#E4A694" stroke-width="5" stroke-linecap="round"/>
+            <!-- kumis & janggut -->
+            <path d="M120 175 q30 20 60 0 q-12 35 -30 40 q-18 -5 -30 -40z" fill="#6B3E22"/>
+            <path d="M120 175 q30 20 60 0" fill="none" stroke="#583116" stroke-width="6" stroke-linecap="round" opacity=".5"/>
+            <!-- mulut -->
+            <path d="M140 185 q10 12 20 0" stroke="#B05A4A" stroke-width="5" stroke-linecap="round" fill="none"/>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <!-- GALERI (placeholder saja) -->
+    <section class="section" aria-labelledby="galeri">
+    <h2 id="galeri">Candid some adorable moment on video call</h2>
+    <div class="gallery">
+        <figure class="ph has-img">
+            <img src="Mr. Peace.jpeg"
+                    alt="Mr. Peace"
+                    style="width:100%;height:100%;object-fit:cover;display:block;">
+        </figure>
+        <figure class="ph has-img">
+            <img src="Your kind Mom.jpeg"
+                    alt="Your kind Mom"
+                    style="width:100%;height:100%;object-fit:cover;display:block;">
+        </figure>
+        <figure class="ph has-img">
+            <img src="Mr. Psycho Killer Pink Knife.jpeg"
+                    alt="Mr. Psycho Killer Pink Knife"
+                    style="width:100%;height:100%;object-fit:cover;display:block;">
+        </figure>
+    </div>
+    </section>
+
+
+    <footer>
+      Dibuat dengan 💙 pastel vibes.
+    </footer>
+  </div>
+
+  <script>
+    /* ===== Reduce-motion: class-based + toggle ===== */
+    const root = document.documentElement;
+    const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const forceBox = document.getElementById('forceAnim');
+
+    function applyReduceMotionState(force = false){
+      if (force) { root.classList.remove('rm-reduce'); return; }
+      if (prefersReduce.matches) root.classList.add('rm-reduce');
+      else root.classList.remove('rm-reduce');
+    }
+
+    // Auto-enable Force pada iOS agar animasi tampil di Safari iPhone
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    if (isIOS && forceBox) {
+      forceBox.checked = true;
+      applyReduceMotionState(true);
+    } else {
+      applyReduceMotionState(false);
+    }
+    prefersReduce.addEventListener?.('change', () => {
+      applyReduceMotionState(forceBox?.checked);
+    });
+    forceBox?.addEventListener('change', (e)=>{
+      applyReduceMotionState(e.target.checked);
+    });
+
+    /* ===== Confetti ===== */
+    const confettiRoot = document.querySelector('.confetti');
+    function shootConfetti(pieces = 140, area) {
+      const colors = ['#A3CEF1','#9BE3DD','#FAD7D2','#E6D9FF','#CFE8FF','#B6D6F2'];
+      for (let i = 0; i < pieces; i++) {
+        const el = document.createElement('i');
+        const vw = area ? area.left + Math.random()*area.width : Math.random()*100;
+        el.style.left = vw + 'vw';
+        el.style.setProperty('--sx', (Math.random()*40-20) + 'vw');
+        el.style.setProperty('--t', (5 + Math.random()*4) + 's');
+        el.style.background = colors[i % colors.length];
+        el.style.width = (6 + Math.random()*6) + 'px';
+        el.style.height = (10 + Math.random()*10) + 'px';
+        confettiRoot.appendChild(el);
+        setTimeout(()=> el.remove(), 9000);
+      }
+    }
+
+    /* ===== Balloons ===== */
+    const balloonHost = document.getElementById('balloons');
+    function addBalloon({x = Math.random()*100, color, dur} = {}) {
+      const b = document.createElement('div');
+      b.className = 'balloon';
+      b.style.setProperty('--x', x + 'vw');
+      const palette = ['#8EC5FF','#9BE3DD','#FAD7D2','#E6D9FF','#B9E4FF','#C8FFF4'];
+      b.style.setProperty('--fill', color || palette[(Math.random()*palette.length)|0]);
+      b.style.setProperty('--dur', (dur || (10 + Math.random()*6)) + 's');
+      balloonHost.appendChild(b);
+      setTimeout(()=> b.remove(), 16000);
+    }
+    function burstBalloons(n=10){ for(let i=0;i<n;i++) setTimeout(()=>addBalloon(), i*250); }
+
+    /* ===== Cake collapse controller ===== */
+    const cakeSVG = document.getElementById('cake');
+    function getCakeAreaVW(){
+      const r = cakeSVG.getBoundingClientRect();
+      const vw = Math.max(document.documentElement.clientWidth || 1, window.innerWidth || 1);
+      return {left: (r.left / vw) * 100, width: (r.width / vw) * 100};
+    }
+    function startCake() {
+      cakeSVG.classList.remove('collapse');
+      // force reflow untuk restart animasi di iOS Safari
+      void cakeSVG.offsetWidth;
+      cakeSVG.classList.add('collapse');
+
+      const area = getCakeAreaVW();
+      // burst per tier jatuh (selaras dengan delay CSS)
+      setTimeout(()=>shootConfetti(120, area), 200);   // top tier
+      setTimeout(()=>shootConfetti(140, area), 1000);  // tier 2
+      setTimeout(()=>shootConfetti(160, area), 1800);  // tier 3
+      setTimeout(()=>shootConfetti(200, area), 2600);  // bottom tier
+    }
+
+    // Tombol
+    document.getElementById('replay').addEventListener('click', ()=>{
+      startCake(); shootConfetti(200); burstBalloons(6);
+    });
+    document.getElementById('addBalloon').addEventListener('click', ()=>burstBalloons(6));
+
+    // Start awal
+    window.addEventListener('load', ()=>{
+      startCake();
+      burstBalloons(12);
+      shootConfetti(220);
+    });
+  </script>
+</body>
+</html>
